@@ -1,0 +1,171 @@
+{
+  "students": [
+    {
+      "name": "Hamzah Ramadhan",
+      "nis": "18082009",
+      "username": "zett",
+      "gender": "L",
+      "role": "siswa"
+    },
+    {
+      "name": "Muhammad Wirawan",
+      "nis": "08092009",
+      "username": "wirs",
+      "gender": "L",
+      "role": "siswa"
+    },
+    {
+      "name": "Khairul Syah",
+      "nis": "01022009",
+      "username": "kai",
+      "gender": "L",
+      "role": "siswa"
+    },
+    {
+      "name": "Satria Pratama",
+      "nis": "02032009",
+      "username": "satt",
+      "gender": "L",
+      "role": "siswa"
+    },
+    {
+      "name": "Naufal Akbar",
+      "nis": "04052009",
+      "username": "val",
+      "gender": "P",
+      "role": "siswa"
+    }
+  ],
+  "struktur": {
+    "walikelas": "Lasta Heksamana Putra",
+    "ketua": "Hamzah Ramadhan",
+    "wakil": "Muhammad Wirawan",
+    "sekretaris": "Khairul Syah",
+    "bendahara": "Satria Pratama",
+    "photos": {
+      "walikelas": "",
+      "ketua": "",
+      "wakil": "",
+      "sekretaris": "",
+      "bendahara": ""
+    },
+    "seksiList": [
+      {
+        "title": "Keamanan",
+        "name": "Naufal AKbar"
+      }
+    ]
+  },
+  "schedule": [
+    {
+      "id": 1792254671209,
+      "day": "Senin",
+      "subject": "Coding AI",
+      "start": "06:30",
+      "end": "12:00",
+      "teacher": "Lasta Heksamana Putra",
+      "room": "LAB TJKT"
+    },
+    {
+      "id": 1792254688889,
+      "day": "Selasa",
+      "subject": "Coding AI",
+      "start": "06:30",
+      "end": "12:00",
+      "teacher": "Lasta Heksamana Putra",
+      "room": "LAB TJKT"
+    },
+    {
+      "id": 1792254692841,
+      "day": "Rabu",
+      "subject": "Coding AI",
+      "start": "06:30",
+      "end": "12:00",
+      "teacher": "Lasta Heksamana Putra",
+      "room": "LAB TJKT"
+    },
+    {
+      "id": 1792254722036,
+      "day": "Kamis",
+      "subject": "Produktif",
+      "start": "06:30",
+      "end": "12:00",
+      "teacher": "Entis Sutisna",
+      "room": "LAB TJKT"
+    },
+    {
+      "id": 1792254725993,
+      "day": "Jumat",
+      "subject": "Produktif",
+      "start": "06:30",
+      "end": "12:00",
+      "teacher": "Entis Sutisna",
+      "room": "LAB TJKT"
+    }
+  ],
+  "piket": {
+    "Senin": [
+      "Hamzah Ramadhan"
+    ],
+    "Selasa": [
+      "Muhammad Wirawan"
+    ],
+    "Rabu": [
+      "Satria Pratama"
+    ],
+    "Kamis": [
+      "Khairul Syah"
+    ],
+    "Jumat": [
+      "Naufal Akbar"
+    ]
+  },
+  "tasks": [
+    {
+      "id": 1792254899217,
+      "subject": "CODING AI",
+      "title": "Membuat WebApp",
+      "deadline": "2026-10-21",
+      "desc": "",
+      "doneBy": [
+        "18082009",
+        "01022009"
+      ]
+    },
+    {
+      "id": 1792254949481,
+      "subject": "PRODUKTIF",
+      "title": "KONFIGURASI JARINGAN",
+      "deadline": "2026-10-18",
+      "desc": "",
+      "doneBy": [
+        "08092009",
+        "01022009",
+        "04052009"
+      ]
+    }
+  ],
+  "attendanceRecords": {
+    "2026-10-17": {
+      "18082009": "I",
+      "z": "H",
+      "08092009": "A",
+      "01022009": "H",
+      "02032009": "H",
+      "04052009": "H"
+    },
+    "2026-01-17": {
+      "18082009": "H",
+      "08092009": "H",
+      "01022009": "H",
+      "02032009": "H",
+      "04052009": "H"
+    }
+  },
+  "marqueeItems": [
+    "CLASSROOM OVERLOAD V2.0 - SISTEM MANAJEMEN KELAS PALING EKSTREM!",
+    "INFO: PR  coding ai dan produktif DIKUMPULKAN BESOK JAM 07:00 WIB!",
+    "PIKET HARI INI: hamzah ramadhan",
+    "ABSENSI DIBUKA HINGGA PUKUL 08:00 WIB"
+  ]
+}
