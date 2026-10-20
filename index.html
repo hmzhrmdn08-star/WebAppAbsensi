@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CLASSROOM OVERLOAD - Platform Kelas Neo-Brutalist</title>
+  <!-- Google Fonts: Space Grotesk -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700;900&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- QR Code Generator & Scanner Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+  <!-- External CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-black selection:text-yellow-300">
+
+  <!-- TOP ANNOUNCEMENT MARQUEE BAR -->
+  <div class="bg-[#FFD93D] neo-border-sm border-t-0 border-x-0 overflow-hidden py-2 font-black text-xs uppercase tracking-widest z-50 print:hidden">
+    <div id="marquee-container" class="animate-marquee whitespace-nowrap flex items-center gap-8">
+      <!-- Diisi dinamis via JavaScript -->
+    </div>
+  </div>
+
+  <!-- MAIN CONTAINER -->
+  <div id="app" class="flex-1 flex flex-col">
+    <!-- NAVBAR -->
+    <header class="bg-[#FFFDF5] neo-border border-t-0 border-x-0 px-4 lg:px-8 py-4 sticky top-0 z-40 bg-opacity-95 backdrop-blur-sm print:hidden">
+      <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+        
+        <!-- LOGO BRANDING -->
+        <div class="flex items-center gap-3">
+          <div class="bg-[#FF6B6B] neo-border p-2 neo-shadow-sm -rotate-3 hover:rotate-0 transition-transform cursor-pointer">
+            <i data-lucide="layout-grid" class="w-7 h-7 text-black stroke-[3]"></i>
+          </div>
+          <div>
+            <h1 class="text-2xl lg:text-3xl font-black tracking-tighter uppercase leading-none">
+              CLASS<span class="bg-[#FFD93D] px-1 neo-border-sm ml-1 inline-block -rotate-1">OVERLOAD</span>
+            </h1>
+            <p id="brand-subtitle" class="text-xs font-bold tracking-widest text-black/70 uppercase">Portal Kelas XI TJKT 2</p>
+          </div>
+        </div>
+
+        <!-- NAVIGATION TABS -->
+        <nav class="hidden md:flex items-center gap-2 bg-white p-1.5 neo-border neo-shadow-sm">
+          <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn px-3 py-1.5 font-bold text-sm uppercase transition-all bg-[#FFD93D] neo-border-sm">
+            Dashboard
+          </button>
+          <button onclick="switchTab('struktur')" id="nav-struktur" class="nav-btn px-3 py-1.5 font-bold text-sm uppercase transition-all hover:bg-[#C4B5FD]">
+            Struktur
+          </button>
+          <button onclick="switchTab('absensi')" id="nav-absensi" class="nav-btn px-3 py-1.5 font-bold text-sm uppercase transition-all hover:bg-[#C4B5FD]">
+            Absensi
+          </button>
+          <button onclick="switchTab('pelajaran')" id="nav-pelajaran" class="nav-btn px-3 py-1.5 font-bold text-sm uppercase transition-all hover:bg-[#C4B5FD]">
+            Jadwal
+          </button>
+          <button onclick="switchTab('piket')" id="nav-piket" class="nav-btn px-3 py-1.5 font-bold text-sm uppercase transition-all hover:bg-[#C4B5FD]">
+            Piket
+          </button>
+          <button onclick="switchTab('tugas')" id="nav-tugas" class="nav-btn px-3 py-1.5 font-bold text-sm uppercase transition-all hover:bg-[#C4B5FD]">
+            Tugas
+          </button>
+          <button id="nav-admin" onclick="switchTab('admin')" class="nav-btn hidden px-3 py-1.5 font-bold text-sm uppercase transition-all bg-[#FF6B6B] text-white neo-border-sm">
+            Log & Guru Panel
+          </button>
+        </nav>
+
+        <!-- USER PROFILE & LOGIN BUTTON -->
+        <div class="flex items-center gap-3">
+          <div id="user-badge" class="hidden sm:flex items-center gap-2 bg-white px-3 py-1.5 neo-border neo-shadow-sm">
+            <span id="user-role-badge" class="bg-[#C4B5FD] text-black font-black text-xs px-2 py-0.5 neo-border-sm uppercase">SISWA</span>
+            <span id="user-display-name" class="font-bold text-sm uppercase">zett</span>
+          </div>
+
+          <button id="auth-action-btn" onclick="openLoginModal()" class="neo-btn bg-[#FF6B6B] px-4 py-2 font-black text-sm uppercase neo-border neo-shadow flex items-center gap-2 text-white">
+            <i data-lucide="log-in" class="w-4 h-4 stroke-[3]"></i>
+            <span id="auth-btn-text">MASUK</span>
+          </button>
+
+          <!-- MOBILE MENU TOGGLE -->
+          <button onclick="toggleMobileMenu()" class="md:hidden neo-btn bg-[#FFD93D] p-2 neo-border neo-shadow">
+            <i data-lucide="menu" class="w-6 h-6 stroke-[3]"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- MOBILE NAVIGATION DRAWER -->
+      <div id="mobile-menu" class="hidden md:hidden mt-4 pt-4 border-t-4 border-black grid grid-cols-2 gap-2">
+        <button onclick="switchTab('dashboard')" class="p-2 font-bold text-left uppercase neo-border bg-[#FFD93D]">1. Dashboard</button>
+        <button onclick="switchTab('struktur')" class="p-2 font-bold text-left uppercase neo-border bg-white">2. Struktur</button>
+        <button onclick="switchTab('absensi')" class="p-2 font-bold text-left uppercase neo-border bg-white">3. Absensi</button>
+        <button onclick="switchTab('pelajaran')" class="p-2 font-bold text-left uppercase neo-border bg-white">4. Jadwal</button>
+        <button onclick="switchTab('piket')" class="p-2 font-bold text-left uppercase neo-border bg-white">5. Piket</button>
+        <button onclick="switchTab('tugas')" class="p-2 font-bold text-left uppercase neo-border bg-white">6. Tugas</button>
+        <button id="mobile-admin-btn" onclick="switchTab('admin')" class="hidden col-span-2 p-2 font-bold text-center uppercase neo-border bg-[#FF6B6B] text-white">7. Log & Guru Panel</button>
+      </div>
+    </header>
+
+    <!-- CONTENT WRAPPER -->
+    <main class="max-w-7xl w-full mx-auto p-4 lg:p-8 flex-1">
+
+      <!-- TAB 1: DASHBOARD -->
+      <section id="tab-dashboard" class="tab-content space-y-8">
+        <div class="relative bg-[#C4B5FD] neo-border p-6 lg:p-10 neo-shadow-lg overflow-hidden">
+          <div class="absolute -right-10 -bottom-10 opacity-20 pointer-events-none">
+            <i data-lucide="sparkles" class="w-80 h-80 text-black stroke-[1.5]"></i>
+          </div>
+          <div class="relative z-10 max-w-3xl space-y-4">
+            <div class="inline-flex items-center gap-2 bg-[#FFD93D] neo-border-sm px-3 py-1 font-black text-xs uppercase tracking-widest -rotate-1">
+              <i data-lucide="radio" class="w-4 h-4 text-black animate-pulse"></i> Pengumuman Wali Kelas / Guru
+            </div>
+            <h2 class="text-3xl lg:text-5xl font-black uppercase tracking-tight leading-none">
+              PORTAL KELAS <span class="bg-white px-2 neo-border-sm inline-block rotate-1">XI TJKT 2</span>
+            </h2>
+            <p class="font-bold text-lg leading-snug">
+              Selamat datang di sistem manajemen kelas terpadu. Pantau absensi, jadwal, dan progres tugas harian Anda di sini!
+            </p>
+            <div class="pt-2 flex flex-wrap gap-3">
+              <button onclick="switchTab('absensi')" class="neo-btn bg-[#FF6B6B] text-white font-black text-sm uppercase px-5 py-3 neo-border neo-shadow flex items-center gap-2">
+                <i data-lucide="check-square" class="w-5 h-5 stroke-[3]"></i> Menu Absensi
+              </button>
+              <button onclick="switchTab('tugas')" class="neo-btn bg-white font-black text-sm uppercase px-5 py-3 neo-border neo-shadow flex items-center gap-2">
+                <i data-lucide="file-text" class="w-5 h-5 stroke-[3]"></i> Cek Tugas & PR
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="bg-[#FFD93D] neo-border p-5 neo-shadow neo-card-lift relative">
+            <div class="absolute top-3 right-3 bg-black text-white p-2 neo-border-sm"><i data-lucide="users" class="w-6 h-6 stroke-[3]"></i></div>
+            <p class="font-black text-xs uppercase tracking-widest text-black/70">Total Siswa</p>
+            <h3 id="stat-total-siswa" class="text-4xl lg:text-5xl font-black mt-2">8</h3>
+            <p class="font-bold text-xs uppercase mt-2 bg-white inline-block px-2 py-0.5 neo-border-sm">Aktif Terdaftar</p>
+          </div>
+          <div class="bg-[#FF6B6B] neo-border p-5 neo-shadow neo-card-lift text-white relative">
+            <div class="absolute top-3 right-3 bg-white text-black p-2 neo-border-sm"><i data-lucide="calendar-check" class="w-6 h-6 stroke-[3]"></i></div>
+            <p class="font-black text-xs uppercase tracking-widest text-white/80">Absensi Hari Ini</p>
+            <h3 id="stat-attendance-rate" class="text-4xl lg:text-5xl font-black mt-2">100%</h3>
+            <p class="font-bold text-xs uppercase mt-2 bg-black text-yellow-300 inline-block px-2 py-0.5 neo-border-sm">Tercatat</p>
+          </div>
+          <div class="bg-white neo-border p-5 neo-shadow neo-card-lift relative">
+            <div class="absolute top-3 right-3 bg-[#C4B5FD] text-black p-2 neo-border-sm"><i data-lucide="clock" class="w-6 h-6 stroke-[3]"></i></div>
+            <p class="font-black text-xs uppercase tracking-widest text-black/70">Mapel Berikutnya</p>
+            <h3 id="stat-next-subject" class="text-2xl lg:text-3xl font-black mt-2 leading-tight">Jaringan Dasar</h3>
+            <p class="font-bold text-xs uppercase mt-2 bg-[#FFD93D] inline-block px-2 py-0.5 neo-border-sm">Sesuai Jadwal</p>
+          </div>
+          <div class="bg-[#C4B5FD] neo-border p-5 neo-shadow neo-card-lift relative">
+            <div class="absolute top-3 right-3 bg-[#FF6B6B] text-white p-2 neo-border-sm"><i data-lucide="alert-circle" class="w-6 h-6 stroke-[3]"></i></div>
+            <p class="font-black text-xs uppercase tracking-widest text-black/70">Tugas Pending</p>
+            <h3 id="stat-pending-tasks" class="text-4xl lg:text-5xl font-black mt-2">3 PR</h3>
+            <p class="font-bold text-xs uppercase mt-2 bg-white inline-block px-2 py-0.5 neo-border-sm">Deadline Aktif</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div class="lg:col-span-2 bg-white neo-border p-6 neo-shadow space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b-4 border-black">
+              <div class="flex items-center gap-3">
+                <div class="bg-[#FFD93D] p-2 neo-border-sm"><i data-lucide="book-open" class="w-6 h-6 stroke-[3]"></i></div>
+                <h3 class="text-xl font-black uppercase">Jadwal Hari Ini</h3>
+              </div>
+              <span id="current-day-badge" class="bg-black text-white px-3 py-1 font-black text-xs uppercase neo-border-sm">SENIN</span>
+            </div>
+            <div id="dashboard-today-schedule" class="space-y-3"></div>
+          </div>
+          <div class="bg-[#FFD93D] neo-border p-6 neo-shadow space-y-4 relative overflow-hidden">
+            <div class="flex items-center gap-3 pb-3 border-b-4 border-black">
+              <div class="bg-white p-2 neo-border-sm"><i data-lucide="sparkles" class="w-6 h-6 stroke-[3] text-black"></i></div>
+              <div>
+                <h3 class="text-xl font-black uppercase">Petugas Piket</h3>
+                <p class="text-xs font-bold uppercase">Kebersihan Kelas</p>
+              </div>
+            </div>
+            <div id="dashboard-today-piket" class="space-y-3"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 2: STRUKTUR -->
+      <section id="tab-struktur" class="tab-content space-y-8 hidden">
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 bg-[#FFD93D] neo-border p-6 neo-shadow">
+          <div>
+            <span class="bg-white px-2 py-0.5 font-black text-xs uppercase neo-border-sm mb-2 inline-block">ORGANOGRAM KELAS</span>
+            <h2 class="text-3xl lg:text-4xl font-black uppercase">STRUKTUR ORGANISASI KELAS</h2>
+          </div>
+          <button id="admin-edit-struktur-btn" onclick="openEditStrukturModal()" class="hidden neo-btn bg-[#FF6B6B] text-white font-black text-sm uppercase px-4 py-2 neo-border neo-shadow flex items-center gap-2">
+            <i data-lucide="edit-3" class="w-4 h-4 stroke-[3]"></i> Edit Pengurus
+          </button>
+        </div>
+        <div class="space-y-8">
+          <!-- WALI KELAS -->
+          <div class="flex justify-center">
+            <div class="bg-[#C4B5FD] neo-border p-5 neo-shadow-lg text-center w-full max-w-sm relative struktur-popup-card">
+              <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#FF6B6B] text-white text-xs font-black px-3 py-1 neo-border-sm uppercase">WALI KELAS / GURU</div>
+              <div id="avatar-container-walikelas" class="w-20 h-20 mx-auto mt-2 bg-white neo-border rounded-full flex items-center justify-center overflow-hidden mb-3">
+                <i data-lucide="user-check" class="w-10 h-10 stroke-[2.5]"></i>
+              </div>
+              <h3 id="role-walikelas" class="text-xl font-black uppercase">Lasta Heksamana Putra</h3>
+              <p class="text-xs font-bold uppercase text-black/70 mt-1">Wali Kelas XI TJKT 2</p>
+            </div>
+          </div>
+
+          <div class="w-1 h-8 bg-black mx-auto"></div>
+
+          <!-- KETUA & WAKIL KETUA -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+            <div class="bg-white neo-border p-5 neo-shadow text-center relative rotate-1 struktur-popup-card">
+              <div class="absolute -top-3 left-4 bg-[#FFD93D] text-black text-xs font-black px-3 py-0.5 neo-border-sm uppercase">KETUA KELAS</div>
+              <div id="avatar-container-ketua" class="w-16 h-16 mx-auto mt-2 bg-[#C4B5FD] neo-border rounded-full flex items-center justify-center overflow-hidden mb-2">
+                <i data-lucide="crown" class="w-8 h-8 stroke-[2.5]"></i>
+              </div>
+              <h4 id="role-ketua" class="text-lg font-black uppercase">Budi Santoso</h4>
+              <p class="text-xs font-bold uppercase text-black/60">NIS: 21221001</p>
+            </div>
+
+            <div class="bg-white neo-border p-5 neo-shadow text-center relative -rotate-1 struktur-popup-card">
+              <div class="absolute -top-3 left-4 bg-[#FFD93D] text-black text-xs font-black px-3 py-0.5 neo-border-sm uppercase">WAKIL KETUA</div>
+              <div id="avatar-container-wakil" class="w-16 h-16 mx-auto mt-2 bg-[#FF6B6B] text-white neo-border rounded-full flex items-center justify-center overflow-hidden mb-2">
+                <i data-lucide="shield" class="w-8 h-8 stroke-[2.5]"></i>
+              </div>
+              <h4 id="role-wakil" class="text-lg font-black uppercase">Siti Maemunah</h4>
+              <p class="text-xs font-bold uppercase text-black/60">NIS: 21221002</p>
+            </div>
+          </div>
+
+          <div class="w-1 h-8 bg-black mx-auto"></div>
+
+          <!-- SEKRETARIS & BENDAHARA -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+            <div class="bg-[#FFFDF5] neo-border p-5 neo-shadow text-center relative struktur-popup-card">
+              <div class="absolute -top-3 left-4 bg-[#C4B5FD] text-black text-xs font-black px-3 py-0.5 neo-border-sm uppercase">SEKRETARIS</div>
+              <div id="avatar-container-sekretaris" class="w-14 h-14 mx-auto mt-2 bg-white neo-border rounded-full flex items-center justify-center overflow-hidden mb-2">
+                <i data-lucide="file-text" class="w-7 h-7 stroke-[2.5]"></i>
+              </div>
+              <h4 id="role-sekretaris" class="text-lg font-black uppercase">Ahmad Fauzi</h4>
+              <p class="text-xs font-bold uppercase text-black/60">NIS: 21221003</p>
+            </div>
+
+            <div class="bg-white neo-border p-5 neo-shadow text-center relative struktur-popup-card">
+              <div class="absolute -top-3 left-4 bg-[#C4B5FD] text-black text-xs font-black px-3 py-0.5 neo-border-sm uppercase">BENDAHARA</div>
+              <div id="avatar-container-bendahara" class="w-14 h-14 mx-auto mt-2 bg-white neo-border rounded-full flex items-center justify-center overflow-hidden mb-2">
+                <i data-lucide="wallet" class="w-7 h-7 stroke-[2.5]"></i>
+              </div>
+              <h4 id="role-bendahara" class="text-lg font-black uppercase">Dewi Lestari</h4>
+              <p class="text-xs font-bold uppercase text-black/60">NIS: 21221004</p>
+            </div>
+          </div>
+
+          <!-- SEKSI DEPARTEMEN -->
+          <div class="pt-6 border-t-4 border-black">
+            <div class="text-center mb-6">
+              <h3 class="font-black text-xl uppercase bg-black text-white py-2 neo-border-sm inline-block px-6 mx-auto block max-w-xs">SEKSI DEPARTEMEN</h3>
+            </div>
+            <div id="seksi-grid-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 3: ABSENSI -->
+      <section id="tab-absensi" class="tab-content space-y-8 hidden">
+        <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 bg-[#C4B5FD] neo-border p-6 neo-shadow print:bg-white print:neo-shadow-none">
+          <div>
+            <span class="bg-white px-2 py-0.5 font-black text-xs uppercase neo-border-sm mb-2 inline-block">ATTENDANCE SYSTEM</span>
+            <h2 class="text-3xl lg:text-4xl font-black uppercase">REKAP ABSENSI KELAS</h2>
+            <p class="font-bold text-sm">Pilih tanggal untuk melihat atau memfilter rekap kehadiran hari-hari sebelumnya</p>
+          </div>
+          <div class="flex flex-wrap items-center gap-3 w-full lg:w-auto print:hidden">
+            <div class="flex items-center gap-2 bg-white p-1.5 neo-border neo-shadow-sm">
+              <span class="font-black text-xs uppercase px-1">Filter Tanggal:</span>
+              <input type="date" id="attendance-date-picker" onchange="loadAttendanceForDate()" class="neo-border-sm p-1.5 font-black uppercase bg-white outline-none">
+            </div>
+            
+            <!-- Tombol Cetak Laporan (Hanya muncul untuk Admin/Guru) -->
+            <button id="admin-print-attendance-btn" onclick="printAttendanceReport()" class="hidden neo-btn bg-white text-black font-black text-sm uppercase px-4 py-3 neo-border neo-shadow flex items-center gap-2 whitespace-nowrap">
+              <i data-lucide="printer" class="w-5 h-5 stroke-[3]"></i> Cetak Laporan
+            </button>
+
+            <button id="student-qr-btn" onclick="openStudentQRModal()" class="hidden neo-btn bg-[#FFD93D] text-black font-black text-sm uppercase px-4 py-3 neo-border neo-shadow flex items-center gap-2 whitespace-nowrap">
+              <i data-lucide="qr-code" class="w-5 h-5 stroke-[3]"></i> QR Barcode Saya
+            </button>
+
+            <button id="admin-add-student-absensi-btn" onclick="openAddStudentModal()" class="hidden neo-btn bg-[#FFD93D] text-black font-black text-sm uppercase px-5 py-3 neo-border neo-shadow flex items-center gap-2 whitespace-nowrap">
+              <i data-lucide="user-plus" class="w-5 h-5 stroke-[3]"></i> Tambah Siswa Baru
+            </button>
+            <button id="save-attendance-btn" onclick="saveAttendance()" class="hidden neo-btn bg-[#FF6B6B] text-white font-black text-sm uppercase px-5 py-3 neo-border neo-shadow flex items-center gap-2 whitespace-nowrap">
+              <i data-lucide="save" class="w-5 h-5 stroke-[3]"></i> Simpan Absensi
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 print:border print:border-black print:p-2">
+          <div class="bg-emerald-400 neo-border p-4 neo-shadow text-center print:border-black print:shadow-none">
+            <span class="font-black text-xs uppercase">HADIR (H)</span>
+            <h4 id="count-hadir" class="text-3xl font-black mt-1">0</h4>
+          </div>
+          <div class="bg-[#FFD93D] neo-border p-4 neo-shadow text-center print:border-black print:shadow-none">
+            <span class="font-black text-xs uppercase">IZIN (I)</span>
+            <h4 id="count-izin" class="text-3xl font-black mt-1">0</h4>
+          </div>
+          <div class="bg-[#C4B5FD] neo-border p-4 neo-shadow text-center print:border-black print:shadow-none">
+            <span class="font-black text-xs uppercase">SAKIT (S)</span>
+            <h4 id="count-sakit" class="text-3xl font-black mt-1">0</h4>
+          </div>
+          <div class="bg-[#FF6B6B] neo-border p-4 neo-shadow text-center text-white print:bg-white print:text-black print:border-black print:shadow-none">
+            <span class="font-black text-xs uppercase text-white/90 print:text-black">ALPA (A)</span>
+            <h4 id="count-alpa" class="text-3xl font-black mt-1">0</h4>
+          </div>
+        </div>
+
+        <div class="bg-white neo-border neo-shadow overflow-x-auto print:neo-shadow-none print:border-black">
+          <div class="hidden print:block p-4 font-black text-center text-lg border-b-2 border-black">
+            LAPORAN PRESENSI KELAS - TANGGAL: <span id="print-date-heading">-</span>
+          </div>
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-black text-white uppercase text-sm border-b-4 border-black print:bg-gray-200 print:text-black">
+                <th class="p-4 border-r-2 border-white/20 print:border-black">No</th>
+                <th class="p-4 border-r-2 border-white/20 print:border-black">NIS</th>
+                <th class="p-4 border-r-2 border-white/20 print:border-black">Nama Siswa</th>
+                <th class="p-4 border-r-2 border-white/20 text-center print:border-black">Status Kehadiran</th>
+                <th id="attendance-action-header" class="p-4 text-center hidden print:hidden">Aksi Data</th>
+              </tr>
+            </thead>
+            <tbody id="attendance-table-body" class="divide-y-2 divide-black font-bold"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- TAB 4: JADWAL -->
+      <section id="tab-pelajaran" class="tab-content space-y-8 hidden">
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 bg-[#FFD93D] neo-border p-6 neo-shadow">
+          <div>
+            <span class="bg-white px-2 py-0.5 font-black text-xs uppercase neo-border-sm mb-2 inline-block">TIMETABLE KELAS</span>
+            <h2 class="text-3xl lg:text-4xl font-black uppercase">JADWAL PELAJARAN</h2>
+          </div>
+          <button id="admin-add-subject-btn" onclick="openAddSubjectModal()" class="hidden neo-btn bg-black text-white font-black text-sm uppercase px-4 py-2 neo-border neo-shadow flex items-center gap-2">
+            <i data-lucide="plus-circle" class="w-4 h-4 stroke-[3]"></i> Tambah Jadwal
+          </button>
+        </div>
+        <div class="flex flex-wrap gap-2 border-b-4 border-black pb-3">
+          <button onclick="filterScheduleDay('Senin')" id="day-tab-Senin" class="schedule-day-btn px-5 py-2 font-black uppercase neo-border bg-[#FF6B6B] text-white neo-shadow-sm">SENIN</button>
+          <button onclick="filterScheduleDay('Selasa')" id="day-tab-Selasa" class="schedule-day-btn px-5 py-2 font-black uppercase neo-border bg-white neo-shadow-sm">SELASA</button>
+          <button onclick="filterScheduleDay('Rabu')" id="day-tab-Rabu" class="schedule-day-btn px-5 py-2 font-black uppercase neo-border bg-white neo-shadow-sm">RABU</button>
+          <button onclick="filterScheduleDay('Kamis')" id="day-tab-Kamis" class="schedule-day-btn px-5 py-2 font-black uppercase neo-border bg-white neo-shadow-sm">KAMIS</button>
+          <button onclick="filterScheduleDay('Jumat')" id="day-tab-Jumat" class="schedule-day-btn px-5 py-2 font-black uppercase neo-border bg-white neo-shadow-sm">JUM'AT</button>
+        </div>
+        <div id="schedule-list-container" class="grid grid-cols-1 gap-4"></div>
+      </section>
+
+      <!-- TAB 5: PIKET -->
+      <section id="tab-piket" class="tab-content space-y-8 hidden">
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 bg-[#FF6B6B] text-white neo-border p-6 neo-shadow">
+          <div>
+            <span class="bg-black text-white px-2 py-0.5 font-black text-xs uppercase neo-border-sm mb-2 inline-block">CLEANING DUTY</span>
+            <h2 class="text-3xl lg:text-4xl font-black uppercase">JADWAL PIKET KEBERSIHAN</h2>
+          </div>
+          <button id="admin-add-piket-btn" onclick="openAddPiketModal()" class="hidden neo-btn bg-[#FFD93D] text-black font-black text-sm uppercase px-4 py-2 neo-border neo-shadow flex items-center gap-2">
+            <i data-lucide="plus-circle" class="w-4 h-4 stroke-[3]"></i> Atur Piket
+          </button>
+        </div>
+        <div id="piket-grid-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+      </section>
+
+      <!-- TAB 6: TUGAS -->
+      <section id="tab-tugas" class="tab-content space-y-8 hidden">
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 bg-[#C4B5FD] neo-border p-6 neo-shadow">
+          <div>
+            <span class="bg-white px-2 py-0.5 font-black text-xs uppercase neo-border-sm mb-2 inline-block">HOMEWORK & PROJECTS</span>
+            <h2 class="text-3xl lg:text-4xl font-black uppercase">DAFTAR TUGAS & PR KELAS</h2>
+          </div>
+          <button id="admin-add-task-btn" onclick="openAddTaskModal()" class="hidden neo-btn bg-[#FFD93D] text-black font-black text-sm uppercase px-5 py-3 neo-border neo-shadow flex items-center gap-2">
+            <i data-lucide="plus-square" class="w-5 h-5 stroke-[3]"></i> Buat Tugas Baru
+          </button>
+        </div>
+        <div class="bg-white neo-border p-5 neo-shadow space-y-4">
+          <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-2">
+              <span class="font-black text-xs uppercase">Filter Status:</span>
+              <select id="task-filter-status" onchange="renderTasks()" class="neo-border p-1.5 font-bold text-sm bg-white outline-none">
+                <option value="ALL">Semua Tugas</option>
+                <option value="PENDING">Belum Selesai</option>
+                <option value="DONE">Sudah Selesai</option>
+              </select>
+            </div>
+            <div class="w-full sm:w-64">
+              <div class="flex justify-between text-xs font-black uppercase mb-1">
+                <span>Progress Anda</span>
+                <span id="task-progress-text">0/0 Selesai</span>
+              </div>
+              <div class="w-full h-4 bg-gray-200 neo-border-sm overflow-hidden">
+                <div id="task-progress-bar" class="h-full bg-[#FFD93D] transition-all duration-300" style="width: 0%;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="tasks-list-container" class="space-y-4"></div>
+      </section>
+
+      <!-- TAB 7: LOG & ADMIN PANEL (GURU) -->
+      <section id="tab-admin" class="tab-content space-y-8 hidden">
+        <div class="bg-black text-white neo-border p-6 neo-shadow flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div>
+            <span class="bg-[#FF6B6B] text-white px-2 py-0.5 font-black text-xs uppercase neo-border-sm mb-2 inline-block">PANEL GURU / WALI KELAS</span>
+            <h2 class="text-3xl font-black uppercase">LOG & MONITORING KELAS</h2>
+            <p class="font-bold text-xs text-white/70">Pantau riwayat absensi harian, scan QR presensi, dan log pengerjaan tugas seluruh siswa.</p>
+          </div>
+          
+          <div class="flex items-center gap-3">
+            <button onclick="openQRScannerModal()" class="neo-btn bg-[#FFD93D] text-black font-black text-sm uppercase px-4 py-2.5 neo-border neo-shadow flex items-center gap-2">
+              <i data-lucide="qr-code" class="w-5 h-5 stroke-[3]"></i> SCANNER ABSEN QR
+            </button>
+            <i data-lucide="shield-alert" class="w-12 h-12 text-[#FFD93D] stroke-[2.5] hidden md:block"></i>
+          </div>
+        </div>
+
+        <!-- FITUR EKSPORT & IMPOR DATA KELAS -->
+        <div class="bg-white neo-border p-6 neo-shadow space-y-4">
+          <h3 class="text-xl font-black uppercase border-b-4 border-black pb-2 flex items-center gap-2">
+            <i data-lucide="database" class="w-5 h-5 stroke-[3]"></i> Manajemen Cadangan Data (Eksport & Impor)
+          </h3>
+          <p class="text-xs font-bold uppercase text-black/70">Cadangkan data kelas ke file JSON atau pulihkan data dari perangkat lain jika perangkat ini hilang/ganti:</p>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+            <!-- Tombol Eksport -->
+            <div class="p-4 bg-[#FFD93D]/30 neo-border-sm space-y-2">
+              <h4 class="font-black text-sm uppercase flex items-center gap-2">
+                <i data-lucide="download" class="w-4 h-4"></i> Eksport Data Kelas
+              </h4>
+              <p class="text-xs font-bold text-black/70">Unduh seluruh data (absensi, struktur, jadwal, piket, tugas, siswa) ke file JSON.</p>
+              <button onclick="exportClassroomData()" class="neo-btn bg-black text-white font-black text-xs uppercase px-4 py-2.5 neo-border neo-shadow-sm flex items-center gap-2">
+                <i data-lucide="download" class="w-4 h-4"></i> Unduh File Cadangan (.JSON)
+              </button>
+            </div>
+
+            <!-- Tombol Impor -->
+            <div class="p-4 bg-[#C4B5FD]/30 neo-border-sm space-y-2">
+              <h4 class="font-black text-sm uppercase flex items-center gap-2">
+                <i data-lucide="upload" class="w-4 h-4"></i> Impor Data Kelas
+              </h4>
+              <p class="text-xs font-bold text-black/70">Unggah file cadangan `.json` sebelumnya untuk memulihkan seluruh data kelas.</p>
+              <input type="file" id="import-file-input" accept=".json" onchange="importClassroomData(event)" class="w-full text-xs font-bold file:mr-2 file:py-1.5 file:px-3 file:neo-border-sm file:bg-[#FFD93D] file:font-black file:uppercase">
+            </div>
+          </div>
+        </div>
+
+        <!-- PENGATURAN RUNNING TEXT (INFO BERJALAN) -->
+        <div class="bg-white neo-border p-6 neo-shadow space-y-4">
+          <h3 class="text-xl font-black uppercase border-b-4 border-black pb-2 flex items-center gap-2">
+            <i data-lucide="radio" class="w-5 h-5 stroke-[3]"></i> Pengaturan Running Text (Info Berjalan) Atas
+          </h3>
+          <p class="text-xs font-bold uppercase text-black/70">Ubah informasi atau pengumuman yang berjalan di bagian paling atas halaman:</p>
+          <form onsubmit="handleSaveMarquee(event)" class="space-y-3">
+            <div>
+              <label class="block uppercase text-xs font-black mb-1">Daftar Info Berjalan (Pisahkan dengan tanda koma atau baris baru)</label>
+              <textarea id="admin-marquee-input" rows="3" required class="w-full p-3 neo-border focus:bg-[#FFD93D] outline-none font-bold text-sm uppercase" placeholder="CLASSROOM OVERLOAD V2.0, INFO: PR MATEMATIKA DIKUMPULKAN BESOK!"></textarea>
+            </div>
+            <button type="submit" class="neo-btn bg-[#FFD93D] text-black font-black text-xs uppercase px-5 py-3 neo-border neo-shadow flex items-center gap-2">
+              <i data-lucide="save" class="w-4 h-4 stroke-[3]"></i> Update Running Text
+            </button>
+          </form>
+        </div>
+
+        <!-- LOG ABSENSI HARIAN -->
+        <div id="printable-admin-logs-section" class="bg-white neo-border p-6 neo-shadow space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b-4 border-black pb-2">
+            <h3 class="text-xl font-black uppercase flex items-center gap-2">
+              <i data-lucide="calendar" class="w-5 h-5 stroke-[3]"></i> Log Rekap Kehadiran Harian (Histori)
+            </h3>
+            <button onclick="printAdminAttendanceLogs()" class="neo-btn bg-[#FFD93D] text-black text-xs font-black uppercase px-3 py-1.5 neo-border neo-shadow-sm flex items-center gap-1 self-start sm:self-auto print:hidden">
+              <i data-lucide="printer" class="w-4 h-4"></i> Rekap Cetak Total
+            </button>
+          </div>
+          <div class="hidden print:block mb-4 font-black text-center text-lg uppercase border-b-2 border-black pb-2">
+            REKAP LAPORAN TOTAL ABSENSI KELAS XI TJKT 2
+          </div>
+          <p class="text-xs font-bold uppercase text-black/70 print:hidden">Berikut adalah rekam jejak kehadiran siswa berdasarkan tanggal yang pernah dicatat:</p>
+          <div id="admin-attendance-logs-container" class="space-y-4 pt-2"></div>
+        </div>
+
+        <!-- LOG TUGAS SISWA -->
+        <div class="bg-white neo-border p-6 neo-shadow space-y-4 print:hidden">
+          <h3 class="text-xl font-black uppercase border-b-4 border-black pb-2 flex items-center gap-2">
+            <i data-lucide="check-square" class="w-5 h-5 stroke-[3]"></i> Log Pengerjaan Tugas Siswa
+          </h3>
+          <p class="text-xs font-bold uppercase text-black/70">Daftar siswa yang telah menyelesaikan masing-masing tugas:</p>
+          <div id="admin-task-logs-container" class="space-y-4 pt-2"></div>
+        </div>
+
+        <!-- MANAJEMEN AKUN SISWA -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 print:hidden">
+          <div class="bg-white neo-border p-6 neo-shadow space-y-4">
+            <h3 class="text-xl font-black uppercase border-b-4 border-black pb-2 flex items-center gap-2">
+              <i data-lucide="user-plus" class="w-5 h-5 stroke-[3]"></i> Tambah Akun Siswa
+            </h3>
+            <form id="add-student-form" onsubmit="handleCreateStudent(event)" class="space-y-3 font-bold text-sm">
+              <div>
+                <label class="block uppercase text-xs font-black mb-1">Nama Lengkap Siswa</label>
+                <input type="text" id="new-student-name" required placeholder="Contoh: Rian Hidayat" class="w-full p-2.5 neo-border focus:bg-[#FFD93D] outline-none">
+              </div>
+              <div>
+                <label class="block uppercase text-xs font-black mb-1">NIS (Nomor Induk Siswa)</label>
+                <input type="text" id="new-student-nis" required placeholder="21221009" class="w-full p-2.5 neo-border focus:bg-[#FFD93D] outline-none">
+              </div>
+              <div>
+                <label class="block uppercase text-xs font-black mb-1">Username Login</label>
+                <input type="text" id="new-student-username" required placeholder="rian" class="w-full p-2.5 neo-border focus:bg-[#FFD93D] outline-none">
+              </div>
+              <div>
+                <label class="block uppercase text-xs font-black mb-1">Password</label>
+                <input type="password" id="new-student-password" required placeholder="••••••••" class="w-full p-2.5 neo-border focus:bg-[#FFD93D] outline-none">
+              </div>
+              <div>
+                <label class="block uppercase text-xs font-black mb-1">Jenis Kelamin</label>
+                <select id="new-student-gender" class="w-full p-2.5 neo-border bg-white outline-none">
+                  <option value="L">Laki-laki (L)</option>
+                  <option value="P">Perempuan (P)</option>
+                </select>
+              </div>
+              <button type="submit" class="w-full neo-btn bg-[#FF6B6B] text-white font-black uppercase p-3 neo-border neo-shadow mt-2">
+                Simpan Akun Siswa
+              </button>
+            </form>
+          </div>
+
+          <div class="lg:col-span-2 bg-white neo-border p-6 neo-shadow space-y-4">
+            <div class="flex items-center justify-between border-b-4 border-black pb-2">
+              <h3 class="text-xl font-black uppercase flex items-center gap-2">
+                <i data-lucide="users" class="w-5 h-5 stroke-[3]"></i> Daftar Akun Siswa Terdaftar
+              </h3>
+              <button onclick="resetDataToDefault()" class="neo-btn bg-[#FFD93D] text-black text-xs font-black uppercase px-3 py-1.5 neo-border neo-shadow-sm flex items-center gap-1">
+                <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> Reset Data
+              </button>
+            </div>
+            <div class="overflow-x-auto max-h-[400px]">
+              <table class="w-full text-left border-collapse">
+                <thead>
+                  <tr class="bg-[#C4B5FD] text-black uppercase text-xs border-b-2 border-black">
+                    <th class="p-2 border-r-2 border-black">NIS</th>
+                    <th class="p-2 border-r-2 border-black">Nama Siswa</th>
+                    <th class="p-2 border-r-2 border-black">Username</th>
+                    <th class="p-2 border-r-2 border-black">Role</th>
+                    <th class="p-2 text-center">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-student-accounts-body" class="divide-y-2 divide-black font-bold text-xs"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-[#FFD93D] neo-border border-b-0 border-x-0 p-6 mt-12 print:hidden">
+      <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
+        <div>
+          <h4 class="font-black uppercase text-lg">CLASSROOM OVERLOAD SYSTEM</h4>
+          <p class="text-xs font-bold uppercase">Manajemen Kelas Neo-Brutalist Interaktif.</p>
+        </div>
+        <div class="flex items-center gap-2 font-black text-xs uppercase bg-white px-3 py-1.5 neo-border neo-shadow-sm">
+          <span>STATUS: ONLINE & PERSISTENT</span>
+          <span class="w-3 h-3 bg-emerald-500 rounded-full animate-ping"></span>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- MODAL: SCANNER QR ABSENSI (GURU / ADMIN) + UPLOAD FILE QR -->
+  <div id="qr-scanner-modal" class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 hidden print:hidden">
+    <div class="bg-[#FFFDF5] neo-border max-w-md w-full p-6 neo-shadow-xl relative space-y-4">
+      <button onclick="closeQRScannerModal()" class="absolute top-4 right-4 bg-[#FF6B6B] text-white p-1.5 neo-border neo-shadow-sm hover:scale-105 z-[100] cursor-pointer">
+        <i data-lucide="x" class="w-5 h-5 stroke-[3]"></i>
+      </button>
+
+      <div class="space-y-1 text-center">
+        <span class="bg-[#FFD93D] px-2 py-0.5 font-black text-xs uppercase neo-border-sm">QR PRESENSI</span>
+        <h3 class="text-2xl font-black uppercase">SCAN QR ABSEN HADIR</h3>
+        <p class="text-xs font-bold uppercase text-black/70">Arahkan kamera atau unggah file gambar QR</p>
+      </div>
+
+      <div class="neo-border bg-black p-2 min-h-[220px] flex items-center justify-center relative">
+        <div id="qr-reader" class="w-full"></div>
+      </div>
+
+      <!-- OPSI UPLOAD FILE BARCODE / QR -->
+      <div class="bg-white neo-border-sm p-3 space-y-1 text-center">
+        <label class="block font-black text-xs uppercase text-black mb-1">Atau Upload File Gambar Barcode / QR:</label>
+        <input type="file" id="qr-file-input" accept="image/*" onchange="scanQRFromFile(event)" class="w-full text-xs font-bold file:mr-2 file:py-1.5 file:px-3 file:neo-border-sm file:bg-[#FFD93D] file:font-black file:uppercase">
+      </div>
+
+      <div id="scanner-result-msg" class="p-3 bg-[#C4B5FD] neo-border-sm text-center font-black text-xs uppercase min-h-[42px] flex items-center justify-center">
+        MENUNGGU QR CODE DIPINDAI / DIUPLOAD...
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: BARCODE QR SISWA (BISA DICETAK) -->
+  <div id="student-qr-modal" class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 hidden">
+    <div id="printable-qr-card" class="bg-[#FFFDF5] neo-border max-w-sm w-full p-6 neo-shadow-xl relative space-y-4 text-center">
+      <button onclick="closeStudentQRModal()" class="absolute top-4 right-4 bg-[#FF6B6B] text-white p-1.5 neo-border neo-shadow-sm print:hidden z-[100]">
+        <i data-lucide="x" class="w-5 h-5 stroke-[3]"></i>
+      </button>
+
+      <div class="space-y-1">
+        <span class="bg-[#FFD93D] px-2 py-0.5 font-black text-xs uppercase neo-border-sm">KARTU PRESENSI QR KELAS</span>
+        <h3 id="qr-student-name" class="text-2xl font-black uppercase text-black mt-2">-</h3>
+        <p id="qr-student-nis" class="text-xs font-bold uppercase text-black/70">NIS: -</p>
+      </div>
+
+      <div class="flex justify-center p-4 bg-white neo-border my-2">
+        <div id="qrcode-display-container"></div>
+      </div>
+
+      <p class="text-xs font-black uppercase bg-[#C4B5FD] p-2 neo-border-sm print:bg-white print:border-black">
+        PORTAL KELAS XI TJKT 2 - ABSENSI DIGITAL
+      </p>
+
+      <button onclick="printSpecificQRCard()" class="w-full neo-btn bg-[#FF6B6B] text-white font-black text-xs uppercase p-3 neo-border neo-shadow flex items-center justify-center gap-2 print:hidden">
+        <i data-lucide="printer" class="w-4 h-4 stroke-[3]"></i> CETAK KARTU QR BARCODE
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL: LOGIN TERPISAH (GURU & SISWA) -->
+  <div id="login-modal" class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 hidden print:hidden">
+    <div class="bg-[#FFFDF5] neo-border max-w-lg w-full p-6 neo-shadow-xl relative space-y-6 animate-in fade-in zoom-in duration-200 max-h-[90vh] overflow-y-auto">
+      <button onclick="closeLoginModal()" class="absolute top-4 right-4 bg-[#FF6B6B] text-white p-1.5 neo-border neo-shadow-sm hover:scale-105 z-[100]">
+        <i data-lucide="x" class="w-5 h-5 stroke-[3]"></i>
+      </button>
+
+      <div class="space-y-1">
+        <span class="bg-[#FFD93D] px-2 py-0.5 font-black text-xs uppercase neo-border-sm">AUTORISASI LOGIN</span>
+        <h3 class="text-3xl font-black uppercase tracking-tight">PILIH PORTAL MASUK</h3>
+        <p class="text-xs font-bold uppercase text-black/70">Silakan pilih login sebagai Guru/Wali Kelas atau sebagai Siswa</p>
+      </div>
+
+      <div class="grid grid-cols-2 gap-2 border-b-4 border-black pb-4">
+        <button type="button" onclick="switchLoginTab('guru')" id="login-tab-guru-btn" class="neo-btn bg-black text-white font-black text-xs uppercase p-3 neo-border neo-shadow-sm">
+          Portal Guru / Admin
+        </button>
+        <button type="button" onclick="switchLoginTab('siswa')" id="login-tab-siswa-btn" class="neo-btn bg-white text-black font-black text-xs uppercase p-3 neo-border neo-shadow-sm">
+          Portal Siswa
+        </button>
+      </div>
+
+      <!-- FORM LOGIN GURU -->
+      <form id="login-guru-form" onsubmit="handleGuruLogin(event)" class="space-y-4 font-bold text-sm">
+        <div class="bg-[#FF6B6B]/10 p-3 neo-border-sm text-xs font-bold uppercase">
+          Login khusus Wali Kelas / Guru Pengajar (Lasta Heksamana Putra).
+        </div>
+        <div>
+          <label class="block uppercase text-xs font-black mb-1">Username Guru</label>
+          <input type="text" id="guru-username" required value="admin" class="w-full p-3 neo-border focus:bg-[#FFD93D] outline-none font-bold">
+        </div>
+        <div>
+          <label class="block uppercase text-xs font-black mb-1">Password</label>
+          <input type="password" id="guru-password" required placeholder="••••••••" class="w-full p-3 neo-border focus:bg-[#FFD93D] outline-none font-bold">
+        </div>
+        <button type="submit" class="w-full neo-btn bg-[#FF6B6B] text-white font-black text-base uppercase p-3.5 neo-border neo-shadow flex items-center justify-center gap-2">
+          <i data-lucide="shield-check" class="w-5 h-5 stroke-[3]"></i> MASUK SEBAGAI GURU
+        </button>
+      </form>
+
+      <!-- FORM LOGIN SISWA -->
+      <form id="login-siswa-form" onsubmit="handleSiswaLogin(event)" class="space-y-4 font-bold text-sm hidden">
+        <div class="bg-[#C4B5FD]/30 p-3 neo-border-sm text-xs font-bold uppercase">
+          Pilih nama Anda dari daftar siswa terdaftar.
+        </div>
+        <div>
+          <label class="block uppercase text-xs font-black mb-1">Pilih Nama Siswa</label>
+          <select id="login-siswa-select" class="w-full p-3 neo-border bg-white outline-none font-bold uppercase"></select>
+        </div>
+        <button type="submit" class="w-full neo-btn bg-[#FFD93D] text-black font-black text-base uppercase p-3.5 neo-border neo-shadow flex items-center justify-center gap-2">
+          <i data-lucide="user" class="w-5 h-5 stroke-[3]"></i> MASUK SEBAGAI SISWA
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: TAMBAH SISWA -->
+  <div id="student-modal" class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 hidden print:hidden">
+    <div class="bg-[#FFFDF5] neo-border max-w-md w-full p-6 neo-shadow-xl relative space-y-4">
+      <button onclick="closeAddStudentModal()" class="absolute top-4 right-4 bg-[#FF6B6B] text-white p-1.5 neo-border neo-shadow-sm z-[100]"><i data-lucide="x" class="w-5 h-5 stroke-[3]"></i></button>
+      <h3 class="text-2xl font-black uppercase">TAMBAH SISWA BARU</h3>
+      <form id="student-form" onsubmit="handleSaveStudentFromAbsensi(event)" class="space-y-3 font-bold text-sm">
+        <div>
+          <label class="block uppercase text-xs font-black mb-1">Nama Lengkap Siswa</label>
+          <input type="text" id="modal-student-name" required placeholder="Contoh: Ahmad Rizky" class="w-full p-2.5 neo-border focus:bg-[#FFD93D] outline-none">
+        </div>
+        <div>
+          <label class="block uppercase text-xs font-black mb-1">NIS</label>
+          <input type="text" id="modal-student-nis" required placeholder="21221009" class="w-full p-2.5 neo-border focus:bg-[#FFD93D] outline-none">
+        </div>
+        <div>
+          <label class="block uppercase text-xs font-black mb-1">Username</label>
+          <input type="text" id="modal-student-username" required placeholder="rizky" class="w-full p-2.5 neo-border focus:bg-[#FFD93D] outline-none">
+        </div>
+        <div>
+          <label class="block uppercase text-xs font-black mb-1">Jenis Kelamin</label>
+          <select id="modal-student-gender" class="w-full p-2.5 neo-border bg-white outline-none">
+            <option value="L">Laki-laki (L)</option>
+            <option value="P">Perempuan (P)</option>
+          </select>
+        </div>
+        <button type="submit" class="w-full neo-btn bg-[#FFD93D] text-black font-black uppercase p-3 neo-border neo-shadow">Simpan Data Siswa</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: TAMBAH MAPEL -->
+  <div id="subject-modal" class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 hidden print:hidden">
+    <div class="bg-[#FFFDF5] neo-border max-w-md w-full p-6 neo-shadow-xl relative space-y-4">
+      <button onclick="closeSubjectModal()" class="absolute top-4 right-4 bg-[#FF6B6B] text-white p-1.5 neo-border neo-shadow-sm z-[100]"><i data-lucide="x" class="w-5 h-5 stroke-[3]"></i></button>
+      <h3 class="text-2xl font-black uppercase">TAMBAH MATA PELAJARAN</h3>
+      <form id="subject-form" onsubmit="handleSaveSubject(event)" class="space-y-3 font-bold text-sm">
+        <div>
+          <label class="block uppercase text-xs font-black mb-1">Hari</label>
+          <select id="subject-day" class="w-full p-2.5 neo-border bg-white outline-none">
+            <option value="Senin">Senin</option>
+            <option value="Selasa">Selasa</option>
+            <option value="Rabu">Rabu</option>
+            <option value="Kamis">Kamis</option>
+            <option value="Jumat">Jum'at</option>
+          </select>
+        </div>
+        <div>
+          <label class="block uppercase text-xs font-black mb-1">Nama Mata Pelajaran</label>
+          <input type="text" id="subject-name" required placeholder="Biologi Sel" class="w-full p-2.5 neo-border focus:bg-[#FFD93D] outline-none">
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block uppercase text-xs font-black mb-1">Jam Mulai</label>
+            <input type="text" id="subject-start" required placeholder="07:30" class="w-full p-2.5 neo-border focus:bg-[#FFD93D] outline-none">
+          </div>
+          <div>
+            <label class="block uppercase text-xs font-black mb-1">Jam Selesai</label>
+            <input type="text" id="subject-end" required placeholder="09:00" class="w-full p-2.5 neo-border focus:bg-[#FFD93D] outline-none">
+          </div>
+        </div>
+        <div>
+          <label class="block uppercase text-xs font-black mb-1">Pengajar</label>
+          <input type="text" id="subject-teacher" required placeholder="Dr. Susi Susanti" class="w-full p-2.5 neo-border focus:bg-[#FFD93D] outline-none">
+        </div>
+        <div>
+          <label class="block uppercase text-xs font-black mb-1">Ruangan</label>
+          <input type="text" id="subject-room" required placeholder="Lab Biologi" class="w-full p-2.5 neo-border focus:bg-[#FFD93D] outline-none">
+        </div>
+        <button type="submit" class="w-full neo-btn bg-[#FFD93D] text-black font-black uppercase p-3 neo-border neo-shadow">Simpan Jadwal</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: TAMBAH TUGAS -->
+  <div id="task-modal" class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 hidden print:hidden">
+    <div class="bg-[#FFFDF5] neo-border max-w-md w-full p-6 neo-shadow-xl relative space-y-4">
+      <button onclick="closeTaskModal()" class="absolute top-4 right-4 bg-[#FF6B6B] text-white p-1.5 neo-border neo-shadow-sm z-[100]"><i data-lucide="x" class="w-5 h-5 stroke-[3]"></i></button>
+      <h3 class="text-2xl font-black uppercase">BUAT TUGAS BARU</h3>
+      <form id="task-form" onsubmit="handleSaveTask(event)" class="space-y-3 font-bold text-sm">
+        <div>
+          <label class="block uppercase text-xs font-black mb-1">Mata Pelajaran</label>
+          <input type="text" id="task-subject" required placeholder="Matematika Lanjut" class="w-full p-2.5 neo-border focus:bg-[#FFD93D] outline-none">
+        </div>
+        <div>
+          <label class="block uppercase text-xs font-black mb-1">Judul Tugas / PR</label>
+          <input type="text" id="task-title" required placeholder="Latihan Soal Bab 3" class="w-full p-2.5 neo-border focus:bg-[#FFD93D] outline-none">
+        </div>
+        <div>
+          <label class="block uppercase text-xs font-black mb-1">Deadline</label>
+          <input type="date" id="task-deadline" required class="w-full p-2.5 neo-border focus:bg-[#FFD93D] outline-none">
+        </div>
+        <div>
+          <label class="block uppercase text-xs font-black mb-1">Deskripsi</label>
+          <textarea id="task-desc" rows="3" placeholder="Instruksi tugas..." class="w-full p-2.5 neo-border focus:bg-[#FFD93D] outline-none"></textarea>
+        </div>
+        <button type="submit" class="w-full neo-btn bg-[#FF6B6B] text-white font-black uppercase p-3 neo-border neo-shadow">Terbitkan Tugas</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: EDIT STRUKTUR KELAS & UPLOAD FOTO PROFIL -->
+  <div id="struktur-modal" class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 hidden print:hidden">
+    <div class="bg-[#FFFDF5] neo-border max-w-lg w-full p-6 neo-shadow-xl relative space-y-4 max-h-[90vh] overflow-y-auto">
+      <button onclick="closeEditStrukturModal()" class="absolute top-4 right-4 bg-[#FF6B6B] text-white p-1.5 neo-border neo-shadow-sm z-[100]"><i data-lucide="x" class="w-5 h-5 stroke-[3]"></i></button>
+      <h3 class="text-2xl font-black uppercase">EDIT PENGURUS & FOTO PROFIL</h3>
+      <form id="struktur-form" onsubmit="handleSaveStruktur(event)" class="space-y-4 font-bold text-sm">
+        <div class="space-y-3 border-b-4 border-black pb-4">
+          <p class="text-xs font-black uppercase bg-[#FFD93D] p-1 inline-block neo-border-sm">Pengurus Inti & Foto Profil</p>
+          
+          <!-- Wali Kelas -->
+          <div class="p-3 bg-gray-50 neo-border-sm space-y-2">
+            <label class="block uppercase text-xs font-black">Wali Kelas / Guru</label>
+            <input type="text" id="edit-walikelas" required class="w-full p-2 neo-border">
+            <label class="block uppercase text-xs font-black text-black/70">Upload Foto Wali Kelas:</label>
+            <input type="file" id="edit-photo-walikelas" accept="image/*" class="w-full text-xs font-bold file:mr-4 file:py-1 file:px-2 file:neo-border-sm file:bg-[#FFD93D] file:font-black">
+          </div>
+
+          <!-- Ketua Kelas -->
+          <div class="p-3 bg-gray-50 neo-border-sm space-y-2">
+            <label class="block uppercase text-xs font-black">Ketua Kelas</label>
+            <input type="text" id="edit-ketua" required class="w-full p-2 neo-border">
+            <label class="block uppercase text-xs font-black text-black/70">Upload Foto Ketua Kelas:</label>
+            <input type="file" id="edit-photo-ketua" accept="image/*" class="w-full text-xs font-bold file:mr-4 file:py-1 file:px-2 file:neo-border-sm file:bg-[#FFD93D] file:font-black">
+          </div>
+
+          <!-- Wakil Ketua -->
+          <div class="p-3 bg-gray-50 neo-border-sm space-y-2">
+            <label class="block uppercase text-xs font-black">Wakil Ketua</label>
+            <input type="text" id="edit-wakil" required class="w-full p-2 neo-border">
+            <label class="block uppercase text-xs font-black text-black/70">Upload Foto Wakil Ketua:</label>
+            <input type="file" id="edit-photo-wakil" accept="image/*" class="w-full text-xs font-bold file:mr-4 file:py-1 file:px-2 file:neo-border-sm file:bg-[#FFD93D] file:font-black">
+          </div>
+
+          <!-- Sekretaris -->
+          <div class="p-3 bg-gray-50 neo-border-sm space-y-2">
+            <label class="block uppercase text-xs font-black">Sekretaris</label>
+            <input type="text" id="edit-sekretaris" required class="w-full p-2 neo-border">
+            <label class="block uppercase text-xs font-black text-black/70">Upload Foto Sekretaris:</label>
+            <input type="file" id="edit-photo-sekretaris" accept="image/*" class="w-full text-xs font-bold file:mr-4 file:py-1 file:px-2 file:neo-border-sm file:bg-[#FFD93D] file:font-black">
+          </div>
+
+          <!-- Bendahara -->
+          <div class="p-3 bg-gray-50 neo-border-sm space-y-2">
+            <label class="block uppercase text-xs font-black">Bendahara</label>
+            <input type="text" id="edit-bendahara" required class="w-full p-2 neo-border">
+            <label class="block uppercase text-xs font-black text-black/70">Upload Foto Bendahara:</label>
+            <input type="file" id="edit-photo-bendahara" accept="image/*" class="w-full text-xs font-bold file:mr-4 file:py-1 file:px-2 file:neo-border-sm file:bg-[#FFD93D] file:font-black">
+          </div>
+        </div>
+
+        <div class="space-y-3">
+          <div class="flex items-center justify-between">
+            <p class="text-xs font-black uppercase bg-[#C4B5FD] p-1 inline-block neo-border-sm">Seksi Departemen</p>
+            <button type="button" onclick="addSeksiField()" class="neo-btn bg-black text-white text-xs font-black px-2.5 py-1 neo-border-sm">+ Tambah</button>
+          </div>
+          <div id="edit-seksi-container" class="space-y-2"></div>
+        </div>
+
+        <button type="submit" class="w-full neo-btn bg-[#FFD93D] text-black font-black uppercase p-3 neo-border neo-shadow mt-2">Update Struktur & Foto</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: PIKET -->
+  <div id="piket-modal" class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 hidden print:hidden">
+    <div class="bg-[#FFFDF5] neo-border max-w-md w-full p-6 neo-shadow-xl relative space-y-4">
+      <button onclick="closePiketModal()" class="absolute top-4 right-4 bg-[#FF6B6B] text-white p-1.5 neo-border neo-shadow-sm z-[100]"><i data-lucide="x" class="w-5 h-5 stroke-[3]"></i></button>
+      <h3 class="text-2xl font-black uppercase">ATUR PETUGAS PIKET</h3>
+      <form id="piket-form" onsubmit="handleSavePiket(event)" class="space-y-3 font-bold text-sm">
+        <div>
+          <label class="block uppercase text-xs font-black mb-1">Hari</label>
+          <select id="piket-day" class="w-full p-2.5 neo-border bg-white outline-none">
+            <option value="Senin">Senin</option>
+            <option value="Selasa">Selasa</option>
+            <option value="Rabu">Rabu</option>
+            <option value="Kamis">Kamis</option>
+            <option value="Jumat">Jum'at</option>
+          </select>
+        </div>
+        <div>
+          <label class="block uppercase text-xs font-black mb-1">Nama Petugas (Pisahkan koma)</label>
+          <textarea id="piket-members" rows="3" required class="w-full p-2.5 neo-border focus:bg-[#FFD93D] outline-none"></textarea>
+        </div>
+        <button type="submit" class="w-full neo-btn bg-[#FF6B6B] text-white font-black uppercase p-3 neo-border neo-shadow">Simpan Piket</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- External JavaScript -->
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,190 @@
+body {
+  font-family: 'Space Grotesk', sans-serif;
+  background-color: #FFFDF5;
+  color: #000000;
+  background-image: radial-gradient(#000000 1.5px, transparent 1.5px);
+  background-size: 24px 24px;
+}
+
+/* =========================================
+   KURSOR NEO-BRUTALISM KUSTOM
+   ========================================= */
+body, button, input, select, textarea, a {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3C!-- Drop Shadow --%3E%3Cpolygon points='5,5 25,17 17,19 22,29 17,31 12,21 5,25' fill='%23000000'/%3E%3C!-- Main Arrow (Bright Yellow) --%3E%3Cpolygon points='2,2 22,14 14,16 19,26 14,28 9,18 2,22' fill='%23FFD93D' stroke='%23000000' stroke-width='2.5' stroke-linejoin='miter'/%3E%3C/svg%3E"), auto;
+}
+
+button:hover, a:hover, select:hover, input[type="file"]:hover, label:hover {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3C!-- Drop Shadow --%3E%3Cpolygon points='5,5 25,17 17,19 22,29 17,31 12,21 5,25' fill='%23000000'/%3E%3C!-- Main Arrow (Hot Pink) --%3E%3Cpolygon points='2,2 22,14 14,16 19,26 14,28 9,18 2,22' fill='%23FF2A85' stroke='%23000000' stroke-width='2.5' stroke-linejoin='miter'/%3E%3C/svg%3E"), pointer;
+}
+
+.neo-border {
+  border: 4px solid #000000;
+}
+.neo-border-sm {
+  border: 2px solid #000000;
+}
+.neo-shadow-sm {
+  box-shadow: 3px 3px 0px 0px #000000;
+}
+.neo-shadow {
+  box-shadow: 6px 6px 0px 0px #000000;
+}
+.neo-shadow-lg {
+  box-shadow: 10px 10px 0px 0px #000000;
+}
+.neo-shadow-xl {
+  box-shadow: 14px 14px 0px 0px #000000;
+}
+
+.neo-btn, nav button, header button {
+  position: relative;
+  transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.15s ease, background-color 0.15s ease;
+}
+
+.neo-btn:hover, nav button:hover, header button:hover {
+  transform: translateY(-4px) scale(1.03);
+  box-shadow: 6px 6px 0px 0px #000000 !important;
+}
+
+.neo-btn:active, nav button:active, header button:active {
+  transform: translate(3px, 3px) scale(0.97) !important;
+  box-shadow: 1px 1px 0px 0px #000000 !important;
+}
+
+.ripple-effect {
+  position: fixed;
+  border-radius: 50%;
+  border: 2px solid #000000;
+  transform: scale(0);
+  animation: rippleAnimation 0.4s linear forwards;
+  pointer-events: none;
+  z-index: 99999;
+}
+
+@keyframes rippleAnimation {
+  0% { transform: scale(0.2); opacity: 1; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
+.neo-card-lift {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.neo-card-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 10px 10px 0px 0px #000000;
+}
+
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+.animate-marquee {
+  display: flex;
+  width: 200%;
+  animation: marquee 18s linear infinite;
+}
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+::-webkit-scrollbar-track {
+  background: #FFFDF5;
+  border-left: 3px solid #000;
+}
+::-webkit-scrollbar-thumb {
+  background: #FFD93D;
+  border: 3px solid #000;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #FF6B6B;
+}
+
+#struktur-modal {
+  z-index: 9999;
+  pointer-events: auto;
+}
+
+@keyframes popupCard {
+  0% { opacity: 0; transform: scale(0.8) translateY(20px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.struktur-popup-card {
+  animation: popupCard 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  transition: all 0.2s ease-in-out;
+}
+
+.struktur-popup-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 12px 12px 0px 0px #000000 !important;
+}
+
+/* =========================================
+   PENGATURAN MODE CETAK (PRINT) KUSTOM
+   ========================================= */
+@media print {
+  body {
+    background-image: none !important;
+    background-color: #ffffff !important;
+  }
+  
+  body * {
+    visibility: hidden;
+  }
+
+  body.printing-qr #student-qr-modal, 
+  body.printing-qr #student-qr-modal * {
+    visibility: visible !important;
+  }
+  body.printing-qr #student-qr-modal {
+    position: fixed !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: white !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  body.printing-attendance #tab-absensi, 
+  body.printing-attendance #tab-absensi * {
+    visibility: visible !important;
+  }
+  body.printing-attendance #tab-absensi {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 10px !important;
+    background: white !important;
+  }
+
+  body.printing-admin-logs #printable-admin-logs-section, 
+  body.printing-admin-logs #printable-admin-logs-section * {
+    visibility: visible !important;
+  }
+  body.printing-admin-logs #printable-admin-logs-section {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 15px !important;
+    background: white !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+  
+  .print\:hidden {
+    display: none !important;
+  }
+}
